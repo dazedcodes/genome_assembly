@@ -1,0 +1,3 @@
+>SigmaKappaOmega9 genome, assume each position is iid uniformly randomly chosen
+ACACCCC
+ATGTACG
