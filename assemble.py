@@ -23,35 +23,37 @@ def read_single_fasta(filename):
             reads.append(x)
     return reads
 
-
-
 def compute_k_mers(list, k_length):
     """
     Takes a list and length of k-mer as parameters and returns a list of k-mers
     from the list.
 
-    Input: list (Array) - an array of reads. k-mer (Int) - the length of the k-mer.
+    Input: list (Array) - an array of reads. k_length (Int) - the length of the k-mer.
     Output: k_mers (Array) - the list of all possible k-mers for each read in
             the input array.
     """
     k_mers = []
-
-    print "list of reads: ", list
-    print "k length: ", k_length
-    print ""
-
     for read in range(len(list)):
-        print "read: ", read
-        print "list[read]: ", list[read]
         for i in range(len(list[read]) - k_length):
-            print "list[read][i:i+k_length]: ", list[read][i:i+k_length]
             k_mer = list[read][i:i+k_length]
             k_mers.append(k_mer)
-        print ""
-    print "length of input list: ", len(list)
     return k_mers
 
+def build_de_bruijn_graph(k_mer_list, k_length):
+    """
+    Takes a k-mer list and length of k-mers as parameters and returns the number
+    of verticies and edges for the constructed graph.
 
+    Input: k_mer_list (Array) - list of all possible k-mers from a list of reads.
+           k_length (Int) - the length of the k-mer.
+    Output: result (Array) - a list which represents [# of verticies, # of edges]
+            for the De Bruijn Graph.
+    """
+    result = []
+
+    V = compute_k_mers(k_mer_list, k_length - 1)
+    
+    return result
 def main():
 
     import sys
@@ -60,7 +62,12 @@ def main():
     reads = read_single_fasta(sys.argv[1])
     k = int(sys.argv[2])
 
-    print "k-mers list:", compute_k_mers(reads, k)
+    k_mer_list = compute_k_mers(reads, k)
+    print "k-mers list:", k_mer_list
+    de_bruijn_graph = build_de_bruijn_graph(k_mer_list,k)
+
+    # print "Number of verticies in graph: ", de_bruijn_graph[0]
+    # print "Number of edges in graph: ", de_bruijn_graph[1]
 
 
 if __name__ == '__main__':
