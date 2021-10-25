@@ -39,7 +39,7 @@ def compute_k_mers(list, k_length):
             k_mers.append(k_mer)
     return k_mers
 
-def build_de_bruijn_graph(k_mer_list, k_length):
+def de_bruijn_verticies_edges(k_mer_list, k_length):
     """
     Takes a k-mer list and length of k-mers as parameters and returns the number
     of verticies and edges for the constructed graph.
@@ -52,7 +52,21 @@ def build_de_bruijn_graph(k_mer_list, k_length):
     result = []
 
     V = compute_k_mers(k_mer_list, k_length - 1)
-    
+    result.append(len(V))
+
+    E = {}
+    for vertex in range(len(V)):
+        E.setdefault(V[vertex],[0])
+
+    for vertex in V:
+        if vertex in E:
+            E[vertex][0]+= 1
+
+    edge_total = 0
+    for edge in E:
+        edge_total+=E[edge][0]
+
+    result.append(edge_total)
     return result
 def main():
 
@@ -63,11 +77,10 @@ def main():
     k = int(sys.argv[2])
 
     k_mer_list = compute_k_mers(reads, k)
-    print "k-mers list:", k_mer_list
-    de_bruijn_graph = build_de_bruijn_graph(k_mer_list,k)
+    de_bruijn_graph = de_bruijn_verticies_edges(k_mer_list,k)
 
-    # print "Number of verticies in graph: ", de_bruijn_graph[0]
-    # print "Number of edges in graph: ", de_bruijn_graph[1]
+    print "Number of verticies in graph: ", de_bruijn_graph[0]
+    print "Number of edges in graph: ", de_bruijn_graph[1]
 
 
 if __name__ == '__main__':
